@@ -1,0 +1,218 @@
+#main_visual {
+    position: relative;
+    padding: 0;
+    margin: 0;
+    background-color: #156082; /*紹介動画の上に入る謎のスペースを塗りつぶす*/
+}
+
+#backimg_wide img,#backimg_pc img,#backimg_tb img,#backimg_sp img {
+  width: 100%;
+}
+
+
+#backimg_pc,#backimg_tb,#backimg_sp {
+  display: none;
+}
+
+
+#main_visual_contents {
+  width: 90%;
+  position: absolute;
+  top: 50%; 
+  left: 50%;
+  transform: translate(-50% , -50%);
+  text-align: center;
+}
+
+#title img {
+  width: 300px;
+  text-align: center;
+}
+
+#title h1 {
+    font-weight: 900;
+    font-size: 100px;
+    margin: 0;
+    margin-bottom: 3px;
+    border: 0;
+    text-align: center;
+    color: #222;
+  }
+#title h3 {
+    font-weight: 700;
+    font-size: 30px;
+    text-align: center;
+    color: #444;
+    border: 0px;
+    padding: 0;
+}
+
+
+.theme_color{
+  color: #156082;
+}
+
+#visual_menu {
+  margin-top: 2%;
+}
+  
+#visual_menu ul{
+  display: flex; /*リンクは横並び*/
+  flex-wrap: wrap; /*折り返しあり*/
+  justify-content: center; /*左右真ん中寄せ*/
+  padding: 0;
+  margin: 0;
+}
+
+#visual_menu ul li {
+  border-radius: 10px; /*角丸*/
+  display: block;
+  margin: 10px;
+  background-color: #555;
+  text-align: center;
+  width: 480px;
+  padding: 10px 20px;
+}
+
+#visual_menu a{
+  text-decoration: none;
+}
+
+#visual_menu ul li.visual_menu_maps {
+  background-color:#156082;
+}
+
+#visual_menu ul li.visual_menu_maps span {
+  font-size: 32px;
+}
+
+
+
+#visual_menu li a {
+display: block; /*これを設定しないとimg+spanの幅にしかリンクが設定されない（緑の四角のどこを押してもリンクが飛ぶようにしたい）*/
+}
+
+/* リンク箇所ホバー */
+#visual_menu a:hover {
+  opacity: 0.5;
+}
+
+#visual_menu ul li span {
+font-size: 24px;
+color: #eee;
+font-weight: 700;
+}
+
+
+@media(max-width:1980px) {
+  #backimg_wide,#backimg_tb,#backimg_sp {
+    display: none;
+  }
+  #backimg_pc {
+    display: inline;
+  }
+}
+
+
+@media(max-width:1200px) {
+  #backimg_wide,#backimg_pc,#backimg_sp {
+    display: none;
+  }
+  #backimg_tb {
+    display: inline;
+  }
+  #title img {
+    width: 400px;
+  }
+  #title h1 {
+    font-size: 80px;
+  }
+  #title h3 {
+    font-size: 28px;
+  }
+  #visual_menu ul li {
+    width: 360px;
+    margin: 5px;
+    padding: 5px 10px;
+  }
+  #visual_menu ul li span {
+    font-size: 16px;
+  }
+  #visual_menu ul li.visual_menu_maps span {
+    font-size: 24px;
+  }
+
+  
+}
+
+@media(max-width:720px) {
+  #backimg_wide,#backimg_pc,#backimg_tb {
+    display: none;
+  }
+  #backimg_sp {
+    display: inline;
+  }
+  #title img {
+    width: 200px;
+  }
+  #title h1 {
+    font-size: 40px;
+  }
+  #title h3 {
+    font-size: 14px;
+  }
+  #visual_menu ul li {
+    border-radius: 4px;
+    margin: 5px;
+    background-color: #444;
+    text-align: center;
+    padding: 5px 10px;
+  }
+  #visual_menu ul li span,pan {
+    font-size: 14px;
+  }
+  #visual_menu ul li.visual_menu_maps span {
+    font-size: 18px;
+  }
+}
+
+
+
+
+/* 紹介動画 */
+
+#intro_movie h1 {
+  color: #eee;
+  margin: 0;
+}
+
+
+#intro_movie {
+  width: 100%;
+  text-align: center;
+  background-color: #156082;
+  padding: 40px 0 120px 0;
+  
+}
+#intro_movie video {
+  max-width: 1080px;
+}
+
+
+/* フッター */
+.footer {
+  margin: 30px auto;
+  margin-bottom: 100px;
+  max-width: 1080px;
+}
+
+@media (max-width: 1100px) {
+  .footer {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+/* .footer p {
+  padding: 0;
+} */

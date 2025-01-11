@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>サイクルポテンシャルマップ</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    
+    <!-- PCブラウザでタブに表示されるアイコン画像 -->
+    <link rel="shortcut icon" href="img/favicon.png">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New&display=swap" rel="stylesheet">
+    
+    <!-- Maplibre -->
+    <link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet">
+    <script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
+    <!-- D3 -->
+    <script charset="utf-8" src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- H3 -->
+    <script src="https://unpkg.com/h3-js"></script>
+
+    <script charset="utf-8" src="display.js"></script>
+    <link href="map.css" rel="stylesheet">
+    
+    <script charset="utf-8" src="header.js"></script>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <header id="header-placeholder"></header>
+    <main>
+        <form class="stationForm" id="potentialStationForm">
+            <input type="text" id="potentialStation" list="stationList">
+            <datalist id="stationList"></datalist>
+            <button type="submit" class="stationFormButton" id="potentialStationButton">情報を見る</button>
+        </form>
+        <div class="map-overlay">
+            <button onclick="toggleDiv('setting-toggle', 'settings-contents', '隠す', '表示設定')" id="setting-toggle">隠す</button>
+            <div id="settings-contents">
+                <h1>サイクルポテンシャルマップ</h1>
+                <p>各駅・駅間リンクについて、自転車利用のポテンシャルを表示します。</p>
+                <h2>表示設定</h2>
+                <div class="slider-container">     
+                    <label for="cycleMaxDist" class="slider-label">自転車移動の最大距離</label>
+                    <input type="range" id="cycleMaxDist" min=4 max=10 step=2 value=6>
+                    <span id="cycleMaxDistShow" class="value-display">6 [km]</span>
+                </div>
+                <form id="pickParamRadioForm">
+                    <h3>駅で表示するデータ</h3>
+                    <input type="radio" id="cyclePotential" name="pickParamRadio" value="cyclePotential" checked>
+                    <label for="cyclePotential">駅のサイクルポテンシャル［人/日］</label><br>
+                    <!-- <input type="radio" id="numPorts" name="pickParamRadio" value="numPorts" checked>
+                    <label for="numPorts">駅付近のポート数［箇所数］</label><br> -->
+                    <input type="radio" id="totalCapacity" name="pickParamRadio" value="totalCapacity">
+                    <label for="totalCapacity">駅周辺シェアサイクルドック数［台数］</label><br>
+                    <!-- <input type="radio" id="potPerCap" name="pickParamRadio" value="potPerCap">
+                    <label for="potPerCap">ドック数あたりポテンシャル</label><br> -->
+                </form>
+            </div>
+        </div>
+        <div class="map-overlay-right" id="map-overlay-right">
+            <button onclick="toggleDiv('route-toggle', 'overlay-right-contents', '隠す', '詳細を表示')" id="route-toggle">詳細を表示</button>
+            <div id="overlay-right-contents" style="display:none;">
+                <h2 id="potentialHead">駅ポテンシャル情報</h2>
+                <h3 id="maxPotentialHead">自転車利用最大距離別ポテンシャル</h3>
+                <div id="stationPotential"></div>
+                <h3>ポテンシャルの高いリンク</h3>
+                <div id="highPotentialLinks">駅を選択してください。</div>
+                <h3>駅周辺サイクルポート情報</h3>
+                <div id="cycleDockInfo">駅を選択してください。</div>
+            </div>
+
+        </div>
+
+        <div id="map"></div>
+        <script type="module" charset="utf-8" src="potential_map.js"></script>
+
+        <div id="loading-screen">
+            <div id="loading-contents">Loading...</div>
+        </div>
+    </main>
+
+</body>

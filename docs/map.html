@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>急がば漕げマップ</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    
+    <!-- PCブラウザでタブに表示されるアイコン画像 -->
+    <link rel="shortcut icon" href="img/favicon.png">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New&display=swap" rel="stylesheet">
+    
+    <!-- Maplibre -->
+    <link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet">
+    <script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
+    <!-- D3 -->
+    <!-- <script charset="utf-8" src="https://d3js.org/d3.v7.min.js"></script> -->
+    <!-- H3 -->
+    <script src="https://unpkg.com/h3-js"></script>
+    <script charset="utf-8" src="display.js"></script>
+    <link href="map.css" rel="stylesheet">
+
+    <!-- 共通 -->
+    <script charset="utf-8" src="header.js"></script>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <header id="header-placeholder"></header>
+    <main>
+        <form class="stationForm" id="sourceStationForm">
+            <input type="text" id="sourceStation" value="吉祥寺" list="stationList">
+            <datalist id="stationList"></datalist>
+            <button type="submit" class="stationFormButton" id="sourceStationButton">出発駅に設定</button>
+        </form>
+        <div class="map-overlay">
+            <button onclick="toggleDiv('setting-toggle', 'settings-contents', '隠す', '表示設定')" id="setting-toggle">隠す</button>
+            <div id="settings-contents">
+                <h2>到達圏マップ</h2>
+                <p>選択した出発駅から各駅への所要時間を表示します。</p>
+                <div id="selectData">
+                    <!-- <h3>出発駅指定</h3>
+                    <form id="sourceStationForm">
+                        <input type="text" id="sourceStation" value="吉祥寺" list="stationList">
+                        <datalist id="stationList"></datalist>
+                        <button type="submit" id="sourceStationButton">設定</button>
+                    </form> -->
+                    <h3>自転車の利用設定</h3>
+                    <div class="slider-container">     
+                        <label for="cycleMinDist" class="slider-label">自転車移動の最小距離</label>
+                        <input type="range" id="cycleMinDist" min=1 max=10 step=1 value=2>
+                        <span id="cycleMinDistShow" class="value-display">2 [km]</span>
+                    </div>
+                    <div class="slider-container">     
+                        <label for="cycleMaxDist" class="slider-label">自転車移動の最大距離</label>
+                        <input type="range" id="cycleMaxDist" min=1 max=10 step=1 value=6>
+                        <span id="cycleMaxDistShow" class="value-display">6 [km]</span>
+                    </div>
+                    <div class="slider-container">    
+                        <label for="extraTime" class="slider-label">許容する追加時間</label>
+                        <input type="range" id="extraTime" min=0 max=30 step=1 value=10>
+                        <span id="extraTimeShow" class="value-display">10 [分]</span>
+                    </div>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="sharedCycleOnly">
+                        <label for="sharedCycleOnly">シェアサイクルのある駅のみ自転車利用</label>
+                    </div>
+                    <div id="shareCycleOptions">
+                        <form id="cyclingServiceRadioForm">
+                            <p>使用するバイクシェアサービス<p>
+                            <input type="radio" id="helloRadio" name="cyclingServiceRadio" value="hello">
+                            <label for="helloRadio">HELLO CYCLING</label>            
+                            <input type="radio" id="docomoRadio" name="cyclingServiceRadio" value="docomo">
+                            <label for="docomoRadio">dバイクシェア</label>            
+                            <input type="radio" id="bothRadio" name="cyclingServiceRadio" value="total" checked>
+                            <label for="bothRadio">両方</label>
+                        </form>
+                        <div class="slider-container">
+                            <!-- ポートまでの距離 (H3 res11でのk-rings)
+                            概ね1メモリで50mなのでそれにのっとって概数表示 -->
+                        <label for="portKRings" class="slider-label">ポートまでの最大距離</label>
+                        <input type="range" id="portKRings" min=0 max=9 step=1 value=5>
+                        <span id="portKRingsShow" class="value-display">約 300 [m]</span>
+                        </div>  
+                    </div>
+                    <h3>所要時間表示の設定</h3>
+                    <form id="selectDataRadio">
+                        <input type="radio" id="distCycle" name="distSelect" value="distCycle">
+                        <label for="distCycle">提案経路での所要時間</label><br>
+                        <input type="radio" id="distNoCycle" name="distSelect" value="distNoCycle">
+                        <label for="distNoCycle">自転車は使用しない</label><br>
+                        <!-- <input type="radio" id="distForceCycle" name="distSelect" value="distForceCycle">
+                        <label for="distForceCycle">自転車を無理にでも使用</label><br> -->
+                        <input type="radio" id="distCycleOnly" name="distSelect" value="distCycleOnly">
+                        <label for="distCycleOnly">自転車が有効の箇所のみ</label><br>
+                        <input type="radio" id="distDifference" name="distSelect" value="distDifference" checked>
+                        <label for="distDifference">自転車使用による時間変化</label>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+        <div class="map-overlay-right" id="map-overlay-right">
+            <button id="route-toggle">経路情報を表示</button>
+            <div id="route-contents" style="display: none;">
+            <p id="routeInfo">到着駅を地図上で選択してください。</p>
+            <div id="routeContainer">
+                <div class="tab">
+                    <button class="tablinks active" id="bestTab" onclick="openTab(event, 'bestRoute')">提案経路<hr></button>
+                    <button class="tablinks" id="cycleTab" onclick="openTab(event, 'cycleRoute')">自転車使用<hr></button>
+                    <button class="tablinks" id="noCycleTab" onclick="openTab(event, 'noCycleRoute')">自転車不使用<hr></button>          
+                </div>
+                <div id="bestRoute" class="tabcontent">到着駅を選択してください。</div>
+                <div id="cycleRoute" class="tabcontent">到着駅を選択してください。</div>
+                <div id="noCycleRoute" class="tabcontent">到着駅を選択してください。</div>
+                </div>
+            </div>
+        </div>
+        <div id="map"></div>
+        <script charset="utf-8" src="cycleport.js"></script>
+        <script type="module" charset="utf-8" src="map.js"></script>
+
+        <div id="loading-screen">
+            <div id="loading-contents">Loading...</div>
+        </div>
+    
+    </main>
+
+</body>

@@ -1,0 +1,192 @@
+* {
+    font-family: "Zen Kaku Gothic New";
+}
+
+body, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+#header ul,#header li {
+    list-style-type: none;    
+}
+
+
+#header {
+    background-color: #156082;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Space between title and menu */
+    padding: 0.5rem 1rem;
+    box-shadow: 0 2px 5px rgba(#156082, 0.2);
+    position: relative;
+}
+
+/* #header {
+    background-color: #156082;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+} */
+
+#header p {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.navbar-menu ul {
+    display: flex;
+    gap: 0.2rem; /* Add spacing between menu items */
+}
+
+.navbar-menu li {
+    margin: 0;
+}
+
+.navbar-menu a {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#website-title a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.5rem;
+    padding: 0.5rem 0.75rem;
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: 900;
+}
+
+.navbar-menu a:hover {
+    background-color: #555;
+}
+
+#menu-toggle {
+    display: none; /* Hidden by default */
+    font-size: 1.5rem;
+    background: none;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#menu-toggle:focus {
+    outline: none;
+}
+
+
+
+
+
+#website-title {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+#website-title a {
+    text-decoration: none;
+    color: white;
+    transition: color 0.3s;
+}
+
+#website-title a:hover {
+    color: #bbb;
+}
+
+.navbar-menu {
+    display: flex;
+}
+
+.navbar-menu ul {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.navbar-menu a {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.navbar-menu a:hover {
+    background-color: #104862;
+    /* border-radius: 4px; */
+}
+
+#menu-toggle {
+    display: none; /* Hidden by default */
+    font-size: 1.5rem;
+    background: none;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#menu-toggle:focus {
+    outline: none;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    #menu-toggle {
+        display: block; /* Show hamburger menu on smaller screens */
+    }
+
+    .navbar-menu {
+        display: none; /* Hide the menu initially */
+        flex-direction: column;
+        position: absolute;
+        top: 100%; /* Position directly below the hamburger */
+        right: 0;
+        background-color: #104862;
+        width: 100%; /* Full width to match the screen */
+        z-index: 1000; /* Ensure the navbar appears above other content */
+    }
+
+    .navbar-menu ul {
+        margin-left: auto;
+    }
+
+    .navbar-menu a {
+        text-align: right;
+        text-decoration: none;
+        color: white;
+        padding: 0.5rem 1rem;
+        display: block;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .navbar-menu.active {
+        display: flex; /* Show the menu when active */
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 840px) {
+
+    .navbar-menu ul {
+        flex-direction: column;
+        gap: 0; /* Remove gaps in vertical layout */
+        margin-left: auto;
+    }
+
+    .navbar-menu a {
+        text-align: right;
+        text-decoration: none;
+        color: white;
+        padding: 0.5rem 1rem;
+        display: block;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+}
+

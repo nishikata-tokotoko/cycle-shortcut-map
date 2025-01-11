@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <title>急がば漕げマップ</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="鉄道とシェアサイクルを組み合わせたユニークな乗換方法を提案するサイトです。">
+    
+    <!-- PCブラウザでタブに表示されるアイコン画像 -->
+    <link rel="shortcut icon" href="img/favicon.png">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New&display=swap" rel="stylesheet">
+    
+    <!-- maplibreを読み込む -->
+    <link href="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css" rel="stylesheet">
+    <style> #map { width: 1000px; height: 600px; } </style>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="index.css">
+
+    <!-- 共通 -->
+    <script charset="utf-8" src="header.js"></script>
+    <link href="style.css" rel="stylesheet">
+
+
+
+</head>
+
+
+<body>
+    <header id="header-placeholder"></header>
+    <main>
+        
+        <div id="main_visual">
+            <div id="backimg_wide">
+                <img src="img/backimg_wide.png" alt="タイトル背景画像">
+            </div>
+            <div id="backimg_pc">
+                <img src="img/backimg_pc.png" alt="タイトル背景画像">
+            </div>
+            <div id="backimg_tb">
+                <img src="img/backimg_tb.png" alt="タイトル背景画像">
+            </div>
+            <div id="backimg_sp">
+                <img src="img/backimg_sp.png" alt="タイトル背景画像">
+            </div>
+            <div id="main_visual_contents">
+                <div id="title">
+                    <img src="img/favicon.png" alt="急がば漕げマップ">
+                    <h1><span class="theme_color">急</span>がば<span class="theme_color">漕</span>げマップ</h1>
+                    <h3>Bike shortcut: Beat the winding rails</h3>
+                </div>
+                <div id="visual_menu">
+                    <ul>
+                        <li class="visual_menu_maps"><a href="map.html"><span>到達時間マップ</span></a></li>
+                        <li class="visual_menu_maps"><a href="cycle_station.html"><span>サイクルポテンシャルマップ</span></a></li>
+                    </ul>
+                    <ul>
+                        <li><a href="about.html"><span>急がば漕げマップについて</span></a></li>
+                        <li><a href="example.html"><span>おもしろ事例集</span></a></li>            
+                        <li><a href="explained.html"><span>しくみ</span></a></li>
+                    </ul>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 紹介動画 -->
+        <div id="intro_movie">
+            <h1>Introduction video</h1>
+            <video autoplay controls muted width="100%">
+                <source src="img/20250103_急がば漕げマップ.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <div class="footer">
+            <h3>注意事項</h3>
+            <p>本ウェブサイトが利用する公共交通データは、公共交通オープンデータチャレンジにおいて提供されたもの（2024年12月末時点のデータを利用）、あるいは公開情報を参照して制作者が自ら作成したものを利用していますが、必ずしも正確・完全なものとは限りません。本アプリケーションの表示内容について、公共交通事業者への直接の問合せは行わないでください。</p>
+            <p>Copyright ©Nishikata Tokotoko Explorers  All Rights Reserved.</p>
+            
+        </div>
+
+
+
+
+        
+        
+    </main>
+
+
+
+</body>
+</html>

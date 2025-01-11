@@ -1,0 +1,284 @@
+body {
+  margin: 0;
+}
+
+
+/* 
+フォントをZenKakuGothicNewにする。
+ただしGoogleからダウンロードしたままのデータは重いのでウェイトは2つで軽量化済み。
+ */
+ @font-face {
+  font-family: 'Zen Kaku Gothic New';
+  src: url("fonts/ZenKakuGothicNew-Regular.woff") format("woff");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Zen Kaku Gothic New';
+  src: url("fonts/ZenKakuGothicNew-Black.woff") format("woff");
+  font-weight: 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Zen Kaku Gothic New';
+  src: url("fonts/ZenKakuGothicNew-Bold.woff") format("woff");
+  font-weight: 700;
+  font-display: swap;
+}
+
+
+/* フォントサイズの設定 */
+body {
+  font: size 12px;
+}
+
+h1 {
+  font-size: 44px;
+  color: #111;
+}
+h2 {
+  font-size: 30px;
+  margin-top: 40px;
+  margin-bottom: 10px;
+  color: #111;
+}
+h3 {
+  font-size: 22px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  color: #111;
+}
+h4{
+  font-size: 16px;
+  margin-top: 8px;
+  margin-bottom: 4px;
+  color: #111;
+}
+p {
+  margin-top: 4px;
+  margin-bottom: 2px;
+  padding-left: 16px;
+  color: #222;
+}
+li {
+  margin-top: 4px;
+  margin-bottom: 2px;
+}
+ul { 
+  list-style-type: circle;
+  padding-left: 30px;
+  }
+ol {
+  list-style-type: decimal;
+  padding-left: 30px;
+}
+  
+/* フォントサイズの設定（スマホ） */
+@media (max-width: 695px) {/* 695px以下*/
+body {
+    font-size: 12px;
+}
+h1{
+  font-size: 30px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+h2 {
+  font-size: 24px;
+  margin-top: 32px;
+  margin-bottom: 8px;
+}
+h3 {
+  font-size: 18px;
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+h4 {
+  font-size: 14px;
+  margin-top: 4px;
+  margin-bottom: 2px;
+}
+p {
+  margin-top: 2px;
+  margin-bottom: 1px;
+  padding-left: 12px;
+}
+li {
+  margin-top: 2px;
+  margin-bottom: 1px;
+}
+ul { 
+  list-style-type: circle;
+  padding-left: 24px;
+  }
+ol {
+  list-style-type: decimal;
+  padding-left: 24px;
+}
+}
+
+
+/* 段落スタイル（文字サイズ以外）の設定 */
+h1 {
+  font-weight: 900;
+
+}
+h2 {
+  font-weight: 900;
+  /* background: #eee; */
+  /* border-left: #1e8702 solid 10px; */
+  padding-left: 8px;
+  line-height: 1.8;
+  border-left: solid 8px #156082;
+  /* background-color: #dbe6fe; */
+  }
+h3 {
+  font-weight: 700;
+  padding-left: 8px;
+  line-height: 1.6;
+  border-left: solid 8px #C1E5F5;
+}
+h4 {
+  font-weight: 700;
+
+}
+p {
+  font-weight: 400;
+}
+
+@media(max-width: 695px) {
+  h2, h3{
+    padding-left: 4px;
+  }
+}
+
+
+
+
+.bold-text{
+  font-weight: 700;
+  background:linear-gradient(transparent 70%, #f9d55d 0) ;
+}
+
+
+/* 記事枠 */
+.article {
+    margin: 0 auto;
+    margin-bottom: 60px;
+    max-width: 1080px;
+}
+
+
+@media (max-width: 1100px) {
+  .article {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 60px;
+  }
+}
+
+.article img {
+  width: 200px;
+  margin: 10px auto;
+}
+
+.example_img {
+  text-align: center;
+  /* margin: 10px; */
+}
+
+
+
+/* about.html用 */
+.explanation_img {
+  text-align: center;
+}
+
+.explanation_img img {
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100vh;
+  width: auto;
+  height: auto;
+}
+
+.suggest_route {
+  color: #DAA520;
+}
+
+.cycle_route {
+  color: #004080;
+}
+
+.nocycle_route {
+  color: #6699CC;
+}
+
+/* 表 */
+.article table {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+  margin: 30px 0;
+}
+
+caption {
+  font-weight: bold;
+}
+
+.article table tr {
+  width: 100%;
+  border-bottom: 1px solid #aaaaaa;
+  /* border-left: none;
+  border-right: none; */
+}
+
+.article table th, .article table td {
+  padding: 5px 5px;
+  /* border-bottom: 1px solid #aaaaaa; */
+}
+
+.explain-table tr :nth-child(1), .explain-table tr :nth-child(2), .explain-table-2 tr :nth-child(3) {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.explain-table tr {
+  width: 100%;
+}
+
+.explain-table tr td, .explain-table tr th {
+  min-width: 15%;
+}
+
+.explain-table tr :last-child {
+  max-width: 60%;
+}
+
+#data-fill tr :first-child {
+  width: 65%;
+}
+
+#data-fill tr :last-child {
+  width: 35%;
+}
+
+/* 図 */
+#h3_img img {
+  max-width: 600px;
+}
+
+
+/* ヘッダーが動かないようにする */
+
+#header_placeholder {
+  position: relative; /*ieはposition:sticky非対応につき先にrelativeにしておく*/
+  z-index: 1000; /*slickのcustom.cssでz-index:100が出てくるので1000にする*/
+}
+
+@supports (position: sticky) {
+  #header_placeholder {
+    position: sticky;
+    top: -1px; /*上から-1pxのところにくっつかせる（#headerのちょっと上に微妙な隙間ができるので0pxではなく-1px）*/
+  }
+}
