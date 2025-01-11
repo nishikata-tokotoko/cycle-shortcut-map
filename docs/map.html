@@ -37,8 +37,9 @@
         <div class="map-overlay">
             <button onclick="toggleDiv('setting-toggle', 'settings-contents', '隠す', '表示設定')" id="setting-toggle">隠す</button>
             <div id="settings-contents">
-                <h2>到達圏マップ</h2>
+                <h2>到達時間マップ</h2>
                 <p>選択した出発駅から各駅への所要時間を表示します。</p>
+                <p><a href="about.html">使い方</a></p>
                 <div id="selectData">
                     <!-- <h3>出発駅指定</h3>
                     <form id="sourceStationForm">
@@ -89,13 +90,13 @@
                         <input type="radio" id="distCycle" name="distSelect" value="distCycle">
                         <label for="distCycle">提案経路での所要時間</label><br>
                         <input type="radio" id="distNoCycle" name="distSelect" value="distNoCycle">
-                        <label for="distNoCycle">自転車は使用しない</label><br>
+                        <label for="distNoCycle">自転車を使用しない場合の所要時間</label><br>
                         <!-- <input type="radio" id="distForceCycle" name="distSelect" value="distForceCycle">
                         <label for="distForceCycle">自転車を無理にでも使用</label><br> -->
                         <input type="radio" id="distCycleOnly" name="distSelect" value="distCycleOnly">
-                        <label for="distCycleOnly">自転車が有効の箇所のみ</label><br>
+                        <label for="distCycleOnly">自転車が有効の箇所のみ所要時間を表示</label><br>
                         <input type="radio" id="distDifference" name="distSelect" value="distDifference" checked>
-                        <label for="distDifference">自転車使用による時間変化</label>
+                        <label for="distDifference">自転車使用による所要時間変化</label>
                     </form>
                 </div>
             </div>

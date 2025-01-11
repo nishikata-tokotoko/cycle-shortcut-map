@@ -744,7 +744,7 @@ map.on('load', () => {
             } else {
                 // プレースホルダー
                 const cycleTable = `
-                    <p>シェアサイクルのリアルタイム利用状況</p>
+                    <p>リアルタイム利用可能台数 / ドック数</p>
                     <table id="cyclePortTable">
                         <tr>
                             <th>dバイクシェア</th><th>HELLO CYCLING</th>
