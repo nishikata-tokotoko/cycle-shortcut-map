@@ -7,6 +7,12 @@ body, ul, li {
     padding: 0;
 }
 
+#header-placeholder {
+    position: sticky;
+    top: 0;
+    z-index: 99999;    
+}
+
 #header ul,#header li {
     list-style-type: none;    
 }

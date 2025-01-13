@@ -115,7 +115,7 @@ font-weight: 700;
 }
 
 
-@media(max-width:1200px) {
+@media(max-width:1600px) {
   #title img {
     width: 400px;
   }
