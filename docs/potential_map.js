@@ -107,7 +107,7 @@ function createPieChart (selector, data, range, label)  {
         .duration(1000)
         .attr("d", arc)
         .attr("fill", d => color(d.data[0]))
-        .style("opacity", 0.7);
+        // .style("opacity", 0.7);
 
     slices.exit().remove();
 
@@ -126,6 +126,9 @@ map.on('load', () => {
         fetch('doc_data/edge_bet.geojson').then((response) => response.json()),
         
     ]).then(([railGeom, stationGeom, helloPorts, docomoPorts, edgeBet]) => {
+        // 不要なものを削除
+        stationGeom.features = stationGeom.features.filter((feature) => !(['新前橋', '渋川', '中之条', '長野原草津口'].includes(feature.properties.station_name)));
+
         // sourceに追加
         map.addSource('railway', {
             type: 'geojson',
@@ -207,6 +210,21 @@ map.on('load', () => {
                 ],
             }
         });
+        // 選択された駅
+        map.addLayer({
+            'id': 'stationGeomSelected',
+            'type': 'circle',
+            'source': 'stationGeom',
+            'paint': {
+                'circle-radius': 0,
+                'circle-color': '#ffffff',
+                'circle-opacity': 0,
+                'circle-stroke-color': '#ffffff',
+                'circle-stroke-width': 5,
+                'circle-stroke-opacity': 1
+            }
+        });
+        map.setFilter('stationGeomSelected', false);   
 
         // 駅ラベル
         map.addLayer({
@@ -258,11 +276,13 @@ map.on('load', () => {
             'type': 'line',
             'source': 'edgeBet',
             'paint': {
-                "line-width": 0
+                "line-width": 0,
+                'line-color': '#DAA520',
+                'line-opacity': 0
             }
         }, 'stationGeom');
         // まずは隠す
-        map.setFilter('edgeBetSelected', false);
+        // map.setFilter('edgeBetSelected', false);
 
         paintBet();
 
@@ -327,6 +347,10 @@ map.on('load', () => {
                     Math.sqrt(maxEdgeBet), 40
                 ]
             ]);
+            // ホバーで出てくるやつも一緒に選択
+            map.setPaintProperty('edgeBetSelected', 'line-width',
+                map.getPaintProperty('edgeBet', 'line-width')
+            );
             // 表示するものをフィルター
             map.setFilter(
                 'edgeBet',
@@ -405,6 +429,11 @@ map.on('load', () => {
                         'to-string',
                         ['round', totalCapacity]
                     ]);
+                    map.setPaintProperty('stationGeomLabel', 'text-color', [
+                        'interpolate', ['linear'], totalCapacity,
+                        maxTotalCap / 3, '#222222',
+                        maxTotalCap / 2.999, '#ffffff'
+                    ]);
                     map.setFilter('stationGeomLabel', null);                
                     break;
 
@@ -444,6 +473,8 @@ map.on('load', () => {
                 //     map.setFilter('stationGeomLabel', null);                
                 //     break;                
             }
+            // 選択したレイヤーの半径を表示
+            map.setPaintProperty('stationGeomSelected', 'circle-radius', map.getPaintProperty('stationGeom', 'circle-radius'));
         }
 
         // Popup
@@ -544,6 +575,17 @@ map.on('load', () => {
                 </table>
             `;
             edgePopup.setLngLat(coordinates).setHTML(description).addTo(map);
+
+            // ホバーされたものを表示
+            map.setPaintProperty('edgeBetSelected', 'line-opacity', 
+                [
+                    'case',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    1,
+                    0
+                ],
+            );
+            
         });
 
         // 離れたら削除
@@ -557,6 +599,13 @@ map.on('load', () => {
 
         // 駅のサイクリングポテンシャルを更新
         function updateCyclingPotential(stationName) {
+            // クリックされた駅のみ表示
+            map.setPaintProperty('stationGeomSelected', 'circle-radius', map.getPaintProperty('stationGeom', 'circle-radius'));
+            map.setFilter(
+                'stationGeomSelected',
+                ['==', ['get', 'station_name'], clickedStation]
+            );
+
             document.getElementById('potentialHead').textContent = `${stationName}駅 ポテンシャル情報`
             // 情報を取得
             const selectedFeature = stationGeom.features.filter((feature) => feature.properties.station_name === stationName)[0];
@@ -685,7 +734,7 @@ map.on('load', () => {
             let tableHTML = `
                 <p>クリックすると到着駅の詳細情報を表示します。</p>
                 <table class="linkBetTable" id="linkBetTable">
-                    <tr><th colspan="2">自転車リンク発着駅</th><th>距離[m]</th><th>ポテンシャル［人/日］</th></tr>
+                    <tr><th colspan="2">自転車リンク発着駅</th><th>距離</th><th>ポテンシャル</th></tr>
             `
             showLinks.forEach((feature) => {
                 const otherStation = feature.properties.source === stationName ? feature.properties.target : feature.properties.source;
@@ -710,21 +759,52 @@ map.on('load', () => {
 
             // 生成した表に対して、駅をクリックすればそっちの情報に飛ぶようにeventListenerを設定
             document.getElementById('linkBetTable').addEventListener('click', (event) => {
+                
+                const clickedTr = event.target.closest('tr');
 
-                clickedStation = event.target.closest('tr').dataset.otherStation;
-                document.getElementById('potentialStation').value = clickedStation;
+                if (clickedTr) {
+                    clickedStation = clickedTr.dataset.otherStation;
+                    document.getElementById('potentialStation').value = clickedStation;
+                    
+                    // ホバーの情報解除
+                    map.removeFeatureState({
+                        'source': 'edgeBet'
+                    });
 
-                // 新駅に飛ぶ
-                const newStation = stationGeom.features.filter((feature) => feature.properties.station_name === clickedStation)[0];
-                map.flyTo({
-                    center: newStation.geometry.coordinates,
-                    // zoom: 11,
-                });
-                updateCyclingPotential(clickedStation);
-                getHighPotentialLinks(clickedStation, numLinks);
-                showCycles(clickedStation);
+                    // 新駅に飛ぶ
+                    const newStation = stationGeom.features.filter((feature) => feature.properties.station_name === clickedStation)[0];
+                    map.flyTo({
+                        center: newStation.geometry.coordinates,
+                        // zoom: 11,
+                    });
+                    updateCyclingPotential(clickedStation);
+                    getHighPotentialLinks(clickedStation, numLinks);
+                    showCycles(clickedStation);
+                }
+
             });
-
+            // 生成した表に対して、駅にホバーしたら地図上に表示するものを設定
+            document.getElementById('linkBetTable').addEventListener('mouseover', (event) => {
+                const hoverStation = event.target.closest('tr').dataset.otherStation;
+                if(hoverStation) {
+                    // ホバーしたのと同じエッジを選択
+                    const hoverEdge = map.getSource('edgeBet')._data.features.findIndex((feature) => ((feature.properties.source === clickedStation) && (feature.properties.target === hoverStation)) || ((feature.properties.source === hoverStation) && (feature.properties.target === clickedStation)));
+                    if (hoverEdge !== -1) {
+                        map.setFeatureState({
+                            source: 'edgeBet',
+                            id: hoverEdge
+                        }, {
+                            'hover': true
+                        });
+                    }
+                }
+            });
+            // ホバーのfeaturestateをリセット
+            document.getElementById('linkBetTable').addEventListener('mouseout', () => {
+                map.removeFeatureState({
+                    'source': 'edgeBet'
+                });
+            });
         }
 
         // 駅に近いサイクルポート情報を取得
@@ -820,7 +900,7 @@ map.on('load', () => {
                 });
             });
             stationSource.setData(stationSource._data);
-            console.log('Updated Cycle Status');
+            // console.log('Updated Cycle Status');
         }
 
         // H3のグリッドk個分にある空き自転車の数を集計

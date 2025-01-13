@@ -493,7 +493,7 @@ function parsePath(G, path) {
                 break;
         }
     }
-    console.log(pathData);
+    // console.log(pathData);
     // console.log('Total duration: ', totalDuration);
 
     return {

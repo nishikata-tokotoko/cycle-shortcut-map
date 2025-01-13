@@ -114,6 +114,8 @@ map.on('load', function(){
         fetch('doc_data/hello_ports.geojson').then((response) => response.json()),        
         fetch('doc_data/docomo_ports.geojson').then((response) => response.json()),
     ]).then(([railData, railGeom, stationGeom, trainType, graphData, helloPorts, docomoPorts]) => {
+        // 不要なものを削除
+        stationGeom.features = stationGeom.features.filter((feature) => !(['新前橋', '渋川', '中之条', '長野原草津口'].includes(feature.properties.station_name)));
 
         // sourceに追加
         map.addSource('railway', {
@@ -160,7 +162,7 @@ map.on('load', function(){
         const cyclePopup = new maplibregl.Popup({
             closeButton: false,
             closeOnClick: false,
-            anchor: 'bottom-left',
+            anchor: 'top-left',
             offset: 5
         });
 
@@ -427,7 +429,7 @@ map.on('load', function(){
             });
         
             stationSource.setData(stationSource._data);
-            console.log('Updated Cycle Status');
+            // console.log('Updated Cycle Status');
 
         }
         // H3のグリッドk個分にある空き自転車の数を集計
@@ -618,7 +620,7 @@ map.on('load', function(){
 
         // 画面全体をアップデート
         function updateView () {
-            console.log('Updating View');
+            // console.log('Updating View');
             stationPopup.remove();
             // 自転車は消す
             map.setFilter('d_docks', false);
@@ -774,7 +776,7 @@ map.on('load', function(){
                         if (row.classList.contains('pathTableNode')) {
                             const rowStationName = row.dataset.stationName;
                             const rowNodeType = row.dataset.nodeType;
-                            console.log(rowStationName);
+                            // console.log(rowStationName);
 
                             // 駅にズーム
                             const rowStationData = stationGeom.features.filter((feature) => feature.properties.station_name === rowStationName)[0];
@@ -808,7 +810,7 @@ map.on('load', function(){
                 stationGeom
                 const newStation = stationGeom.features.filter((feature) => feature.properties.station_name === cycleStationName)[0];
                 const h3Index = newStation.properties.h3_index;
-                console.log(h3Index);
+                // console.log(h3Index);
                 // Use cached gridDisk if available
                 if (!gridDiskCache.has(h3Index)) {
                     gridDiskCache.set(h3Index, h3.gridDisk(h3Index, maxDistInput));
@@ -884,6 +886,12 @@ map.on('load', function(){
             map.setLayoutProperty('stationGeomLabel', 'text-field', [
                 'to-string',
                 ['round', ['get', paintField]] // Round the 'distCycle' value
+            ]);
+            // 小さい数字が上
+            map.setLayoutProperty('stationGeom', 'circle-sort-key', [
+                '-',
+                0,
+                ['get', paintField]
             ]);
 
             if (value === 'distDifference') {
@@ -1204,24 +1212,30 @@ map.on('load', function(){
                 document.getElementById('sourceStation').value = clickedStationName;
                 updateStartingStation();
             } else {
-                // 到着駅表示
-                map.setFilter(
-                    'clickedStation',
-                    ['==', ['get', 'station_name'], clickedStationName]
-                );
-                map.setFilter(
-                    'clickedStationLabel',
-                    ['==', ['get', 'station_name'], clickedStationName]
-                );
-                map.setFilter('path', null);
-                map.setFilter('pathChosen', null)
-                // 経路表示のアップデート
-                updateRoutes();
-                // map.flyTo({center: clickedFeature.geometry.coordinates});
+                // スタートとゴールが違う場合は経路表示
+                if (clickedStationName !== startingStationName) {
+                    // 到着駅表示
+                    map.setFilter(
+                        'clickedStation',
+                        ['==', ['get', 'station_name'], clickedStationName]
+                    );
+                    map.setFilter(
+                        'clickedStationLabel',
+                        ['==', ['get', 'station_name'], clickedStationName]
+                    );
+                    map.setFilter('path', null);
+                    map.setFilter('pathChosen', null)
+                    // 経路表示のアップデート
+                    updateRoutes();
+                    // map.flyTo({center: clickedFeature.geometry.coordinates});
 
-                // 経路ウィンドウの表示
-                if (document.getElementById('route-contents').style.display === 'none') {
-                    toggleDiv('route-toggle', 'route-contents', '経路情報を隠す', '経路情報を表示');
+                    // 経路ウィンドウの表示
+                    if (document.getElementById('route-contents').style.display === 'none') {
+                        toggleDiv('route-toggle', 'route-contents', '経路情報を隠す', '経路情報を表示');
+                    }
+                } else {
+                    // スタートとゴールが同じ場合は表示をリセット
+                    updateStartingStation();                    
                 }
             }
         });
