@@ -94,7 +94,7 @@ main {
 }
 
 .stationFormButton:hover {
-    background-color: #46B1E1;
+    background-color: #555;
 }
 
 .map-overlay {
@@ -125,7 +125,7 @@ button#setting-toggle {
 }
 
 button#setting-toggle:hover {
-    background-color: #46B1E1;
+    background-color: #555;
 }
 
 #settings-contents {
@@ -221,7 +221,7 @@ button#route-toggle {
 }
 
 button#route-toggle:hover {
-    background-color: #46B1E1;
+    background-color: #555;
 }
 
 #route-contents {

@@ -14,6 +14,13 @@
   display: none;
 }
 
+#main_visual {
+  background-image: url("img/backimg.png");
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+}
 
 #main_visual_contents {
   width: 90%;
@@ -37,6 +44,7 @@
     border: 0;
     text-align: center;
     color: #222;
+    border-bottom: #777 3px solid;
   }
 #title h3 {
     font-weight: 700;
@@ -68,7 +76,7 @@
   border-radius: 10px; /*角丸*/
   display: block;
   margin: 10px;
-  background-color: #555;
+  background-color: #777;
   text-align: center;
   width: 480px;
   padding: 10px 20px;
@@ -86,6 +94,9 @@
   font-size: 32px;
 }
 
+#visual_menu ul li img {
+  width: 20px;
+}
 
 
 #visual_menu li a {
@@ -104,23 +115,7 @@ font-weight: 700;
 }
 
 
-@media(max-width:1980px) {
-  #backimg_wide,#backimg_tb,#backimg_sp {
-    display: none;
-  }
-  #backimg_pc {
-    display: inline;
-  }
-}
-
-
 @media(max-width:1200px) {
-  #backimg_wide,#backimg_pc,#backimg_sp {
-    display: none;
-  }
-  #backimg_tb {
-    display: inline;
-  }
   #title img {
     width: 400px;
   }
@@ -146,12 +141,6 @@ font-weight: 700;
 }
 
 @media(max-width:720px) {
-  #backimg_wide,#backimg_pc,#backimg_tb {
-    display: none;
-  }
-  #backimg_sp {
-    display: inline;
-  }
   #title img {
     width: 200px;
   }
@@ -182,21 +171,49 @@ font-weight: 700;
 /* 紹介動画 */
 
 #intro_movie h1 {
+  width: 90%;
   color: #eee;
-  margin: 0;
+  margin: 0 auto;
+  margin-bottom: 8px;
+}
+
+#intro_movie p {
+  width: 90%;
+  max-width: 1046px;
+  text-align: left;
+  color: #eee;
+  padding: 0;
+  margin: 0.1% auto;
+}
+
+#intro_movie a {
+  color: #eee;
+}
+
+#intro_movie a:hover {
+  color: #bbb;
 }
 
 
 #intro_movie {
   width: 100%;
-  text-align: center;
   background-color: #156082;
-  padding: 40px 0 120px 0;
-  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 0 60px 0;
 }
+
+
 #intro_movie video {
   max-width: 1080px;
+  display: block;
+  margin: 0 auto;
+  margin-top: 10px;
 }
+
+
 
 
 /* フッター */
@@ -213,6 +230,3 @@ font-weight: 700;
   }
 }
 
-/* .footer p {
-  padding: 0;
-} */
