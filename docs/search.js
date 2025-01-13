@@ -591,7 +591,7 @@ function displayPath (parsedPath, railData, trainType, stationGeom) {
                     'cycle_station': '徒歩',
                     'walk': '徒歩',
                     'cycle': '自転車',
-                    'transfer': '乗り換え'
+                    'transfer': '徒歩'
                 }
                 resultTable += `
                     <tr class="edge">
