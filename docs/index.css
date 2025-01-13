@@ -69,7 +69,7 @@
   flex-wrap: wrap; /*折り返しあり*/
   justify-content: center; /*左右真ん中寄せ*/
   padding: 0;
-  margin: 0;
+  margin: 0 auto;
 }
 
 #visual_menu ul li {
@@ -114,17 +114,25 @@ color: #eee;
 font-weight: 700;
 }
 
+@media(max-width:2500px) {
+  #visual_menu ul {
+    max-width: 1100px;
+  }
+}
+
 
 @media(max-width:1600px) {
-  #title img {
-    width: 400px;
-  }
+
   #title h1 {
     font-size: 80px;
   }
   #title h3 {
     font-size: 28px;
   }
+  #visual_menu ul {
+    max-width: 800px;
+  }
+
   #visual_menu ul li {
     width: 360px;
     margin: 5px;
@@ -135,12 +143,10 @@ font-weight: 700;
   }
   #visual_menu ul li.visual_menu_maps span {
     font-size: 24px;
-  }
-
-  
+  }  
 }
 
-@media(max-width:720px) {
+@media(max-width:900px) {
   #title img {
     width: 200px;
   }

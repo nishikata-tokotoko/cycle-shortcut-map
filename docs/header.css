@@ -142,7 +142,7 @@ body, ul, li {
 }
 
 /* Responsive Design */
-@media (max-width: 1320px) {
+@media (max-width: 1440px) {
     #menu-toggle {
         display: block; /* Show hamburger menu on smaller screens */
     }
