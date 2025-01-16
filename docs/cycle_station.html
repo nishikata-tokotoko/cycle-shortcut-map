@@ -59,9 +59,14 @@
                 <h2>表示設定</h2>
                 <div class="slider-container">     
                     <label for="cycleMaxDist" class="slider-label">自転車移動の最大距離</label>
-                    <input type="range" id="cycleMaxDist" min=4 max=10 step=2 value=6>
-                    <span id="cycleMaxDistShow" class="value-display">6 [km]</span>
+                    <input type="range" id="cycleMaxDist" min=4 max=10 step=2 value=8>
+                    <span id="cycleMaxDistShow" class="value-display">8 [km]</span>
                 </div>
+                <div class="slider-container">     
+                    <label for="thresholdMins" class="slider-label">許容する追加時間</label>
+                    <input type="range" id="thresholdMins" min=0 max=10 step=5 value=0>
+                    <span id="thresholdMinsShow" class="value-display">0 [分]</span>
+                </div>                
                 <form id="pickParamRadioForm">
                     <h3>駅で表示するデータ</h3>
                     <input type="radio" id="cyclePotential" name="pickParamRadio" value="cyclePotential" checked>
@@ -79,7 +84,7 @@
             <button onclick="toggleDiv('route-toggle', 'overlay-right-contents', '隠す', '詳細を表示')" id="route-toggle">詳細を表示</button>
             <div id="overlay-right-contents" style="display:none;">
                 <h2 id="potentialHead">駅ポテンシャル情報</h2>
-                <h3 id="maxPotentialHead">自転車利用最大距離別ポテンシャル</h3>
+                <h3 id="maxPotentialHead">許容追加時間別ポテンシャル</h3>
                 <div id="stationPotential"></div>
                 <h3>ポテンシャルの高いリンク</h3>
                 <div id="highPotentialLinks">駅を選択してください。</div>

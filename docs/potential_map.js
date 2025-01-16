@@ -1,6 +1,7 @@
 // グローバル変数
 let cycleMaxDist = Number(document.getElementById('cycleMaxDist').value);
 let clickedStation = '';
+let thresholdMins = Number(document.getElementById('thresholdMins').value);
 
 // ---------- 地図関連 ----------
 
@@ -124,7 +125,6 @@ map.on('load', () => {
         fetch('doc_data/hello_ports.geojson').then((response) => response.json()),        
         fetch('doc_data/docomo_ports.geojson').then((response) => response.json()),
         fetch('doc_data/edge_bet.geojson').then((response) => response.json()),
-        
     ]).then(([railGeom, stationGeom, helloPorts, docomoPorts, edgeBet]) => {
         // 不要なものを削除
         stationGeom.features = stationGeom.features.filter((feature) => !(['新前橋', '渋川', '中之条', '長野原草津口'].includes(feature.properties.station_name)));
@@ -288,7 +288,7 @@ map.on('load', () => {
 
         // betweennessの値の設定
         function paintBet () {
-            const betValue = ["get", String(cycleMaxDist), ["get", "betweenness"]];
+            const betValue = ["get", String(cycleMaxDist), ["get", String(thresholdMins), ["get", "betweenness"]]];
             const totalCapacity = ['get', 'totalCapacity'];
             const potPerCap = [
                 "/", 
@@ -297,10 +297,15 @@ map.on('load', () => {
             ];
             // それぞれの最大値を計算
             const maxEdgeBet = edgeBet.features.reduce((max, feature) => {
-                return feature.properties.betweenness[cycleMaxDist] > max ? feature.properties.betweenness[cycleMaxDist] : max;
+                const betweennessTemp = typeof feature.properties.betweenness === 'string' ? JSON.parse(feature.properties.betweenness) : feature.properties.betweenness;
+                if (!betweennessTemp[5]) {
+                    console.log(feature.properties);
+                }
+                return betweennessTemp[thresholdMins][cycleMaxDist] > max ? betweennessTemp[thresholdMins][cycleMaxDist] : max;
             }, 0);
             const maxNodeBet = stationGeom.features.reduce((max, feature) => {
-                return feature.properties.betweenness[cycleMaxDist] > max ? feature.properties.betweenness[cycleMaxDist] : max;
+                const betweennessTemp = typeof feature.properties.betweenness === 'string' ? JSON.parse(feature.properties.betweenness) : feature.properties.betweenness;
+                return betweennessTemp[thresholdMins][cycleMaxDist] > max ? betweennessTemp[thresholdMins][cycleMaxDist] : max;
             }, 0);
             const maxTotalCap = Math.max(
                 ...stationGeom.features.map((feature) => feature.properties.totalCapacity)
@@ -513,10 +518,11 @@ map.on('load', () => {
             if (typeof betCent === 'string') {
                 betCent = JSON.parse(betCent);
             }
+            betCent = betCent[thresholdMins];
 
             const description = `
                 <h3>${stationName}</h3>
-                <p>自転車ポテンシャル</p><hr>
+                <p>許容追加時間 | <strong>${thresholdMins}分</strong></p><hr>
                 <table class="popup">
                     <tr><th>最大距離</th><th>ポテンシャル</th></tr>
                     <tr><th>4 km</th><th>${Math.round(betCent["4"])} 人/日</th></tr>
@@ -561,10 +567,12 @@ map.on('load', () => {
             if (typeof betCent === 'string') {
                 betCent = JSON.parse(betCent);
             }
+            betCent = betCent[thresholdMins];
 
             const description = `
                 <h3>${source}ー${target}</h3>
                 <p>距離 | <strong>${length} m</strong></p>
+                <p>許容追加時間 | <strong>${thresholdMins}分</strong></p>
                 <hr>
                 <table class="popup">
                     <tr><th>最大距離</th><th>ポテンシャル</th></tr>
@@ -615,12 +623,17 @@ map.on('load', () => {
                 betCent = JSON.parse(betCent);
             }
             // データを整理
-            const data = [
-                { distance: '4 km', potential: Math.round(betCent["4"]) },
-                { distance: '6 km', potential: Math.round(betCent["6"]) },
-                { distance: '8 km', potential: Math.round(betCent["8"]) },
-                { distance: '10 km', potential: Math.round(betCent["10"]) }
+            const dataDist = [
+                { distance: '4 km', potential: Math.round(betCent[thresholdMins]["4"]) },
+                { distance: '6 km', potential: Math.round(betCent[thresholdMins]["6"]) },
+                { distance: '8 km', potential: Math.round(betCent[thresholdMins]["8"]) },
+                { distance: '10 km', potential: Math.round(betCent[thresholdMins]["10"]) }
             ];
+            const dataMins = [
+                { distance: '0 分', potential: Math.round(betCent["0"][cycleMaxDist]) },
+                { distance: '5 分', potential: Math.round(betCent["5"][cycleMaxDist]) },
+                { distance: '10 分', potential: Math.round(betCent["10"][cycleMaxDist]) },                
+            ]
             // const tableHTML = `
             //     <p>${stationName}駅の自転車最大距離別ポテンシャル</p>
             //     <table id="stationPotentialTable">
@@ -657,12 +670,12 @@ map.on('load', () => {
             }
             
             const x = d3.scaleLinear()
-                .domain([0, d3.max(data, d => d.potential)])
+                .domain([0, d3.max(dataMins, d => d.potential)])
                 .range([0, width]);
             
             const y = d3.scaleBand()
                 .range([0, height])
-                .domain(data.map(d => d.distance))
+                .domain(dataMins.map(d => d.distance))
                 .padding(.1);
             
             svg.select(".x-axis")
@@ -678,7 +691,7 @@ map.on('load', () => {
                 .call(d3.axisLeft(y));
             
             const bars = svg.selectAll(".bar")
-                .data(data, d => d.distance);
+                .data(dataMins, d => d.distance);
             
             bars.enter()
                 .append("rect")
@@ -697,7 +710,7 @@ map.on('load', () => {
             
             // Add data labels
             const labels = svg.selectAll(".label")
-                .data(data, d => d.distance);
+                .data(dataMins, d => d.distance);
             
             labels.enter()
                 .append("text")
@@ -705,7 +718,7 @@ map.on('load', () => {
                 .attr("x", d => x(0) + 5)
                 .attr("y", d => y(d.distance) + y.bandwidth() / 2 + 4)
                 .attr("font-size", "10px")
-                .attr("fill", "white")
+                .attr("fill", "#ddd")
                 .attr("font-weight", "bold")
                 .merge(labels)
                 .transition()
@@ -723,8 +736,8 @@ map.on('load', () => {
             // 関係あるリンクを抽出
             const betLinks = edgeBet.features.filter((feature) => (feature.properties.source === stationName) || (feature.properties.target === stationName));
             betLinks.sort((a, b) => {
-                const aBetweenness = typeof a.properties.betweenness === 'string' ? JSON.parse(a.properties.betweenness)[cycleMaxDist] : a.properties.betweenness[cycleMaxDist];
-                const bBetweenness = typeof b.properties.betweenness === 'string' ? JSON.parse(b.properties.betweenness)[cycleMaxDist] : b.properties.betweenness[cycleMaxDist];
+                const aBetweenness = typeof a.properties.betweenness === 'string' ? JSON.parse(a.properties.betweenness)[thresholdMins][cycleMaxDist] : a.properties.betweenness[thresholdMins][cycleMaxDist];
+                const bBetweenness = typeof b.properties.betweenness === 'string' ? JSON.parse(b.properties.betweenness)[thresholdMins][cycleMaxDist] : b.properties.betweenness[thresholdMins][cycleMaxDist];
                 return bBetweenness - aBetweenness;
             });
             // 上位をフィルター
@@ -738,7 +751,7 @@ map.on('load', () => {
             `
             showLinks.forEach((feature) => {
                 const otherStation = feature.properties.source === stationName ? feature.properties.target : feature.properties.source;
-                const betValue = typeof feature.properties.betweenness === 'string' ? JSON.parse(feature.properties.betweenness)[cycleMaxDist] : feature.properties.betweenness[cycleMaxDist];
+                const betValue = typeof feature.properties.betweenness === 'string' ? JSON.parse(feature.properties.betweenness)[thresholdMins][cycleMaxDist] : feature.properties.betweenness[thresholdMins][cycleMaxDist];
                 const length = Math.round(feature.properties.length);
 
                 const tableRow = `
@@ -1007,7 +1020,19 @@ map.on('load', () => {
             document.getElementById('cycleMaxDistShow').textContent = `${cycleMaxDist} [km]`;
             
             paintBet();
+            updateCyclingPotential(clickedStation);
             getHighPotentialLinks(clickedStation, 5);
+        });
+
+        document.getElementById('thresholdMins').addEventListener('input', () => {
+            thresholdMins = Number(document.getElementById('thresholdMins').value);
+            document.getElementById('thresholdMinsShow').textContent = `${thresholdMins} [分]`;
+            
+            paintBet();
+            updateCyclingPotential(clickedStation);
+            getHighPotentialLinks(clickedStation, 5);
+            // showCycles(clickedStation);
+
         });
 
         // ラジオボタンの操作
